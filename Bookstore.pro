@@ -1,65 +1,38 @@
 domains
-    s = symbol.
-    ss = symbol*.
-    i = integer.
+s = symbol
+sl = symbol*
+i = integer
+il = integer*
 
 predicates
-    book(s, s, s, i).
-    min_price(i).
-    max_price(i).
-    books_same_subject(s, ss).
-    books_same_publisher(s, ss).
-    all_books(ss).
-    book_prices(ss).
-    min_value(ss, i).
-    max_value(ss, i).
+nondeterm bname(sl)
+nondeterm bsubject(sl)
+nondeterm bpublisher(sl)
+nondeterm bprice(il)
+nondeterm max(i,i,i)
+nondeterm min(i,i,i)
+nondeterm maxlist(il,i)
+nondeterm minlist(il,i)
+nondeterm findmax(i)
+nondeterm findmin(i)
 
 clauses
-    book("Book1", "Subject1", "Publisher1", 20).
-    book("Book2", "Subject2", "Publisher2", 25).
-    book("Book3", "Subject1", "Publisher3", 15).
-    book("Book4", "Subject3", "Publisher1", 30).
-    book("Book5", "Subject2", "Publisher2", 18).
+bname([book1,book2,book3,book4,book5]).
+bsubject([subject1,subject2,subject1,subject3,subject2]).
+bpublisher([publisher1,publisher2,publisher2,publisher3,publisher1]).
+bprice([10,30,20,50,40]).
 
-min_price(Price) :-
-    findall(PriceTemp, book(_, _, _, PriceTemp), Prices),
-    min_value(Prices, MinPrice),
-    Price = MinPrice.
+findmax(Max):-bprice(X),maxlist(X, Max).
+max(X,Y,Y):-Y>=X.
+max(X,Y,X):-Y<X.
+maxlist([X],X).
+maxlist([H|T],MAX):-maxlist(T,TMAX),max(H,TMAX,MAX).
 
-max_price(Price) :-
-    findall(PriceTemp, book(_, _, _, PriceTemp), Prices),
-    max_value(Prices, MaxPrice),
-    Price = MaxPrice.
-
-books_same_subject(Subject, Books) :-
-    findall(Book, book(Book, Subject, _, _), Books).
-
-books_same_publisher(Publisher, Books) :-
-    findall(Book, book(Book, _, Publisher, _), Books).
-
-all_books(Books) :-
-    findall(Book, book(Book, _, _, _), Books).
-
-book_prices(Prices) :-
-    findall(Price, book(_, _, _, Price), Prices).
-
-min_value([X], X).
-min_value([X, Y | T], Min) :-
-    X =< Y,
-    min_value([X | T], Min).
-
-min_value([X, Y | T], Min) :-
-    X > Y,
-    min_value([Y | T], Min).
-
-max_value([X], X).
-max_value([X, Y | T], Max) :-
-    X >= Y,
-    max_value([X | T], Max).
-
-max_value([X, Y | T], Max) :-
-    X < Y,
-    max_value([Y | T], Max).
+findmin(Min):-bprice(X),minlist(X, Min).
+min(X,Y,Y):-Y<=X.
+min(X,Y,X):-Y>X.
+minlist([X],X).
+minlist([H|T],MIN):-minlist(T,TMIN),min(H,TMIN,MIN).
 
 goal
-    min_price(Price).
+findmin(MIN).
