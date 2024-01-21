@@ -1,2 +1,2 @@
 # Bookstore Visual Prolog
- Bookstore project using prolog
+ Bookstore project using Prolog
